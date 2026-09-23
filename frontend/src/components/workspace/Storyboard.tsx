@@ -37,6 +37,34 @@ type StoryboardProps = {
   onClose?: () => void;
 };
 
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  "http://127.0.0.1:8000";
+
+function getImageUrl(
+  url?: string | null
+) {
+  if (!url) {
+    return undefined;
+  }
+
+  if (
+    url.startsWith("http://127.0.0.1:8000") ||
+    url.startsWith("http://localhost:8000")
+  ) {
+    return url;
+  }
+
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://")
+  ) {
+    return url;
+  }
+
+  return `${BACKEND_URL}/${url.replace(/^\/+/, "")}`;
+}
+
 export default function Storyboard({
   onClose,
 }: StoryboardProps) {
@@ -139,9 +167,7 @@ export default function Storyboard({
               scene.status ||
               "empty",
 
-            imageUrl:
-              scene.image_url ||
-              undefined,
+            imageUrl: getImageUrl(scene.image_url),
 
             approved:
               scene.approved ||
@@ -237,13 +263,18 @@ export default function Storyboard({
           3
         );
 
-      const urls =
-        response.images?.map(
-          (item: {
-            image_url: string;
-          }) =>
-            item.image_url
-        ) || [];
+      const urls: string[] =
+        response.images
+          ?.map(
+            (item: {
+              image_url: string;
+            }) =>
+              getImageUrl(item.image_url)
+          )
+          .filter(
+            (url: string | undefined): url is string =>
+              Boolean(url)
+          ) || [];
 
       if (
         urls.length === 0

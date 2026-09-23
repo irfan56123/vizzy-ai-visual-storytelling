@@ -18,6 +18,22 @@ from .models import ImageGeneration
 
 
 # ============================================================
+# IMAGE URL HELPER
+# ============================================================
+
+
+def build_image_url(request, relative_url):
+    """Build an absolute image URL from the current request host."""
+    if not relative_url:
+        return None
+
+    if relative_url.startswith("http://") or relative_url.startswith("https://"):
+        return relative_url
+
+    return request.build_absolute_uri(relative_url)
+
+
+# ============================================================
 # GENERATE SINGLE IMAGE
 # ============================================================
 
@@ -210,10 +226,9 @@ Requirements:
                 )
             )
 
-            image_url = (
-                request.build_absolute_uri(
-                    relative_image_url
-                )
+            image_url = build_image_url(
+                request,
+                relative_image_url,
             )
 
             generation.status = "completed"
@@ -519,10 +534,9 @@ Requirements:
                     )
                 )
 
-                image_url = (
-                    request.build_absolute_uri(
-                        relative_image_url
-                    )
+                image_url = build_image_url(
+                    request,
+                    relative_image_url,
                 )
 
                 generation.status = "completed"
