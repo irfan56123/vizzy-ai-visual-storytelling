@@ -9,10 +9,8 @@ The application is designed around a collaborative creative process where users 
 ## 🚀 Live Demo
 
 **Live Application:**  
-https://YOUR-LIVE-URL.vercel.app
+https://vizzy-ai-visual-storytelling.vercel.app/
 
-**GitHub Repository:**  
-https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 ---
 
